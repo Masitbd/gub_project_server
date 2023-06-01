@@ -48,6 +48,22 @@ async function run() {
       res.send(teachers);
     });
 
+    app.get("/eee", async (req, res) => {
+   
+      const query = {department: 'Department of EEE'};
+      const cursor = teacherCollection.find(query);
+      const teachers = await cursor.toArray();
+      res.send(teachers);
+    });
+
+    app.get("/applyOnline", async (req, res) => {
+      const query = {};
+
+      const cursor = applicationCollection.find(query);
+      const onlineApplications = await cursor.toArray();
+      res.send(onlineApplications);
+    });
+
     // post api
   app.post("/teacher", async (req, res) => {
     const teacher = req.body;
@@ -62,7 +78,7 @@ async function run() {
     const result = await applicationCollection.insertOne(application)
     res.send(result)
   });
-  
+
   }
   finally {
   }
