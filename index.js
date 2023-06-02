@@ -56,6 +56,15 @@ async function run() {
       res.send(teachers);
     });
 
+    app.get("/cse", async (req, res) => {
+   
+      const query = {department: 'Department of CSE'};
+      const cursor = teacherCollection.find(query);
+     // console.log('hello',cursor)
+      const teachers = await cursor.toArray();
+      res.send(teachers);
+    });
+
     app.get("/applyOnline", async (req, res) => {
       const query = {};
 
