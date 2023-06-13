@@ -51,6 +51,7 @@ async function run() {
     const database = client.db("gub_portal");
     const teacherCollection = database.collection("teachers");
     const applicationCollection = database.collection("onlineApplications");
+    const usersCollection = database.collection("users");
 
     // get api
     app.get("/teacher", async (req, res) => {
@@ -84,7 +85,7 @@ async function run() {
       const cursor = applicationCollection.find(query);
       const onlineApplications = await cursor.toArray();
       res.send(onlineApplications);
-    });
+    });''
 
     // post api
   app.post("/teacher", async (req, res) => {
@@ -93,6 +94,39 @@ async function run() {
     const result = await teacherCollection.insertOne(teacher)
     res.send(result)
   });
+
+
+  app.post("/users", async (req, res) => {
+    const user = req.body;
+    const result = await usersCollection.insertOne(user)
+    res.send(result)
+  });
+
+
+  app.put("/users", async (req, res) => {
+    const user = req.body;
+   
+    const filter = {email: user.email}
+    const options = {upsert: true}
+    const updateDoc = {$set: user}
+
+    const result = await usersCollection.updateOne(filter, updateDoc, options)
+    res.send(result)
+  });
+
+
+  app.put("/users/admin", async (req, res) => {
+    const user = req.body.user;
+   console.log('hello admin', user);
+    const filter = {email: user}
+    const updateDoc = {$set: {role: 'admin'}}
+    console.log('filter', filter);
+
+    const result = await usersCollection.updateOne(filter, updateDoc)
+    res.send(result)
+  });
+
+
 
   app.post("/applyOnline", upload.single('pdf'), async (req, res) => {
     //const application = req.body;
