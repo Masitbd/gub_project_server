@@ -79,13 +79,26 @@ async function run() {
       res.send(teachers);
     });
 
+    app.get("/users/:email", async (req, res) => {
+      console.log('hits users data', req.params.email)
+   
+      const email = req.params.email;
+      const query = {email: email}
+      const user = await usersCollection.findOne(query);
+      let isAdmin = false
+      if (user?.role ==='admin') {
+        isAdmin = true
+      }
+      res.send({admin: isAdmin});
+    });
+
     app.get("/applyOnline", async (req, res) => {
       const query = {};
 
       const cursor = applicationCollection.find(query);
       const onlineApplications = await cursor.toArray();
       res.send(onlineApplications);
-    });''
+    });
 
     // post api
   app.post("/teacher", async (req, res) => {
@@ -117,10 +130,10 @@ async function run() {
 
   app.put("/users/admin", async (req, res) => {
     const user = req.body.user;
-   console.log('hello admin', user);
+   //console.log('hello admin', user);
     const filter = {email: user}
     const updateDoc = {$set: {role: 'admin'}}
-    console.log('filter', filter);
+    //console.log('filter', filter);
 
     const result = await usersCollection.updateOne(filter, updateDoc)
     res.send(result)
