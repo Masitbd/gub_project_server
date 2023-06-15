@@ -62,6 +62,14 @@ async function run() {
       res.send(teachers);
     });
 
+    app.get("/student", async (req, res) => {
+      const query = {};
+
+      const cursor = applicationCollection.find(query);
+      const student = await cursor.toArray();
+      res.send(student);
+    });
+
     app.get("/eee", async (req, res) => {
    
       const query = {department: 'Department of EEE'};
@@ -80,7 +88,7 @@ async function run() {
     });
 
     app.get("/users/:email", async (req, res) => {
-      console.log('hits users data', req.params.email)
+     
    
       const email = req.params.email;
       const query = {email: email}
@@ -99,6 +107,25 @@ async function run() {
       const onlineApplications = await cursor.toArray();
       res.send(onlineApplications);
     });
+
+    app.get("/:teachername", async (req, res) => {
+      // console.log('teacher name', req.params.teachername)
+      const teacherName = req.params.teachername
+      const query = {gender: teacherName};
+      const cursor = applicationCollection.find(query);
+      const onlineApplications = await cursor.toArray();
+      res.send(onlineApplications);
+    });
+
+    app.get("/student/:studentname", async (req, res) => {
+     // console.log('student name', req.params)
+     //const studentName = req.params.studentName
+     const studentName = req.params.studentname
+     const query = {studentName: studentName};
+     const cursor = applicationCollection.find(query);
+     const onlineApplications = await cursor.toArray();
+     res.send(onlineApplications);
+   });
 
     // post api
   app.post("/teacher", async (req, res) => {
